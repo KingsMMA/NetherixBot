@@ -6,13 +6,41 @@ import path from 'path';
 import type Main from '../main/main';
 import type BaseCommand from './commands/base.command';
 
+import fs from 'fs';
+import {City} from "../main/util/types";
+
 export default class NetherixBot extends Client {
     main: Main;
     commands: Collection<string, BaseCommand> = new Collection();
 
+    cities: City[];
+
     constructor(main: Main, options: ClientOptions) {
         super(options);
         this.main = main;
+
+        console.log('Loading cities...');
+        if (fs.existsSync('./cache/cities.json')) {
+            console.log('Cities cache found, loading...');
+            this.cities = JSON.parse(fs.readFileSync('./cache/cities.json', 'utf-8'));
+            console.log(`Loaded ${this.cities.length} cities.`);
+        } else {
+            this.cities = [];
+            console.log('Cities cache not found, fetching from API...');
+            fetch('https://raw.githubusercontent.com/lmfmaier/cities-json/refs/heads/master/cities500.json')
+                .then(res => res.json())
+                .then((data: any) => {
+                    this.cities = data.map((city: any) => ({
+                        id: city.id,
+                        name: `${city.name}, ${city.admin1} ${city.country}`,
+                        latitude: Number.parseFloat(city.lat),
+                        longitude: Number.parseFloat(city.lon),
+                    }));
+                    fs.mkdirSync('./cache', { recursive: true });
+                    fs.writeFileSync('./cache/cities.json', JSON.stringify(this.cities, null, 4));
+                    console.log(`Loaded ${this.cities.length} cities.`);
+                });
+        }
     }
 
     loadCommand(commandPath: PathLike, commandName: string) {
