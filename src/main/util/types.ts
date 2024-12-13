@@ -17,7 +17,7 @@ export interface WeatherData {
 
 export interface Case {
     user: Snowflake;
-    type: 'Warned' | 'Muted' | 'Kicked' | 'Banned';
+    type: 'Warned' | 'Muted' | 'Kicked' | 'Banned' | 'Unmuted' | 'Unbanned';
     reason: string;
     moderator: string;
     date: Date;
