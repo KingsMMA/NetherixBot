@@ -43,6 +43,17 @@ export default class KickCommand extends BaseCommand {
             return interaction.replyError('I cannot kick this user.');
 
         const reason = interaction.options.getString('reason') ?? 'No reason provided.';
+
+        await member.send({
+            embeds: [
+                new KingsDevEmbedBuilder()
+                    .setTitle('You have been kicked.')
+                    .setColor('Red')
+                    .setDescription(`You have been kicked from ${interaction.guild!.name}.`)
+                    .addField('Reason', reason)
+            ]
+        }).catch(() => {});
+
         await member.kick(reason);
 
         let userData = await this.client.main.mongo.getUserData(interaction.guildId!, user.id);
