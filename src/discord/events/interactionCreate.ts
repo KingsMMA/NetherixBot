@@ -25,6 +25,9 @@ export default class {
 
             return command.execute(interaction);
         } else if (interaction.isAutocomplete()) {
+            if (!interaction.guild)
+                return interaction.respond([]);
+
             const command = this.client.commands.get(interaction.commandName);
             if (!command) return;
             return command.autocomplete(interaction);
