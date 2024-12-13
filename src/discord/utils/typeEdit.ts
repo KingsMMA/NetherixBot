@@ -19,6 +19,21 @@ declare module 'discord.js' {
 }
 
 declare global {
+    interface String {
+        /**
+         * Converts a duration string to a duration in milliseconds.  The string should be in the format of ``1d 2h 3m 4s``.
+         * Returns ``-1`` if the string is not in the correct format.
+         */
+        parseDuration(): number;
+    }
+
+    interface Number {
+        /**
+         * Converts a number to ``W days, X hours, Y minutes, Z seconds`` format.
+         */
+        formatTime(): string;
+    }
+
     interface Date {
         /**
          * Converts a date to a discord timestamp.
@@ -71,6 +86,42 @@ CommandInteraction.prototype.replyError = ButtonInteraction.prototype.replyError
             ],
         });
 };
+
+String.prototype.parseDuration = function(): number {
+    const regex = /(?:(\d+)d)? ?(?:(\d+)h)? ?(?:(\d+)m)? ?(?:(\d+)s)?/g;
+    const matches = regex.exec(this.valueOf());
+    if (!matches) return -1;
+
+    const days = parseInt(matches[1]) || 0;
+    const hours = parseInt(matches[2]) || 0;
+    const minutes = parseInt(matches[3]) || 0;
+    const seconds = parseInt(matches[4]) || 0;
+
+    return (days * 86400000) + (hours * 3600000) + (minutes * 60000) + (seconds * 1000);
+}
+
+Number.prototype.formatTime = function () {
+    const days = Math.floor(this.valueOf() / 86400000);
+    const hours = Math.floor((this.valueOf() % 86400000) / 3600000);
+    const minutes = Math.floor(((this.valueOf() % 86400000) % 3600000) / 60000);
+    const seconds = Math.floor((((this.valueOf() % 86400000) % 3600000) % 60000) / 1000);
+    const components: string[] = [];
+    if (days > 0) components.push(`${days} day${days === 1 ? '' : 's'}`);
+    if (hours > 0) components.push(`${hours} hour${hours === 1 ? '' : 's'}`);
+    if (minutes > 0)
+        components.push(`${minutes} minute${minutes === 1 ? '' : 's'}`);
+    if (seconds > 0)
+        components.push(`${seconds} second${seconds === 1 ? '' : 's'}`);
+    return components.length === 0 ?
+        '0 seconds' :
+        components.length === 1 ?
+            components[0] :
+            components.length === 2 ?
+                `${components[0]} and ${components[1]}` :
+                components.length === 3 ?
+                    `${components[0]}, ${components[1]}, and ${components[2]}` :
+                    `${components[0]}, ${components[1]}, ${components[2]}, and ${components[3]}`;
+}
 
 Date.prototype.toDiscord = function (format) {
     switch (format) {

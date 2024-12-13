@@ -43,7 +43,10 @@ export default class LogsCommand extends BaseCommand {
                 new KingsDevEmbedBuilder()
                     .setTitle(`Moderation Logs for ${user.tag}`)
                     .setColor('Blurple')
-                    .setDescription(userData.cases.map((c, i) => `**${i + 1}.** ${c.type} by ${c.moderator} at ${c.date.toDiscord('DD MMMM YYYY HH:MM')}.  Reason: ${c.reason}`).join('\n'))
+                    .setDescription(userData.cases.map((c, i) =>
+                        `**${i + 1}.** ${c.type} by ${c.moderator} at ${c.date.toDiscord('DD MMMM YYYY HH:MM')}${
+                            c.duration ? ` for ${c.duration.formatTime()}` : ''
+                        }.  Reason: ${c.reason}`).join('\n'))
             ]
         });
     }
