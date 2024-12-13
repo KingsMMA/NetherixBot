@@ -18,6 +18,16 @@ declare module 'discord.js' {
     }
 }
 
+declare global {
+    interface Date {
+        /**
+         * Converts a date to a discord timestamp.
+         */
+        toDiscord(format: 'relative' | 'HH:MM' | 'HH:MM:SS' | 'DD/MM/YYYY' | 'DD MMMM YYYY' | 'DD MMMM YYYY HH:MM' | 'dddd, DD MMMM YYYY HH:MM'): string;
+    }
+
+}
+
 CommandInteraction.prototype.replySuccess = ButtonInteraction.prototype.replySuccess = async function (message: string, ephemeral?: boolean) {
     if (this.replied || !this.isRepliable() || this.deferred)
         return this.editReply({
@@ -60,6 +70,25 @@ CommandInteraction.prototype.replyError = ButtonInteraction.prototype.replyError
                     .setDescription(message)
             ],
         });
+};
+
+Date.prototype.toDiscord = function (format) {
+    switch (format) {
+        case 'relative':
+            return `<t:${Math.floor(this.valueOf() / 1000)}:R>`;
+        case 'HH:MM':
+            return `<t:${Math.floor(this.valueOf() / 1000)}:t>`;
+        case 'HH:MM:SS':
+            return `<t:${Math.floor(this.valueOf() / 1000)}:T>`;
+        case 'DD/MM/YYYY':
+            return `<t:${Math.floor(this.valueOf() / 1000)}:d>`;
+        case 'DD MMMM YYYY':
+            return `<t:${Math.floor(this.valueOf() / 1000)}:D>`;
+        case 'DD MMMM YYYY HH:MM':
+            return `<t:${Math.floor(this.valueOf() / 1000)}:f>`;
+        case 'dddd, DD MMMM YYYY HH:MM':
+            return `<t:${Math.floor(this.valueOf() / 1000)}:F>`;
+    }
 };
 
 const real = {
