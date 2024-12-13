@@ -1,9 +1,9 @@
+import type { Snowflake } from 'discord-api-types/globals';
 import type { Db } from 'mongodb';
 import { MongoClient } from 'mongodb';
 
 import type Main from '../main';
-import {Snowflake} from "discord-api-types/globals";
-import {UserData} from "./types";
+import type { UserData } from './types';
 
 export default class Mongo {
     private mongo!: Db;
@@ -27,7 +27,7 @@ export default class Mongo {
     async saveUserData(data: UserData) {
         await this.mongo
             .collection('users')
-            .updateOne({guildId: data.guildId, userId: data.userId}, {$set: data}, {upsert: true});
+            .updateOne({ guildId: data.guildId, userId: data.userId }, { $set: data }, { upsert: true });
     }
 
 }

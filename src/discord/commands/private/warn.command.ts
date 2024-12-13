@@ -1,11 +1,10 @@
-import type {AutocompleteInteraction, ChatInputCommandInteraction} from 'discord.js';
-import {PermissionsBitField} from 'discord.js';
-import {ApplicationCommandOptionType, ApplicationCommandType} from 'discord-api-types/v10';
+import type { ChatInputCommandInteraction } from 'discord.js';
+import { PermissionsBitField } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord-api-types/v10';
 
 import type NetherixBot from '../../netherixBot';
 import KingsDevEmbedBuilder from '../../utils/kingsDevEmbedBuilder';
 import BaseCommand from '../base.command';
-import {Snowflake} from "discord-api-types/globals";
 
 export default class WarnCommand extends BaseCommand {
     constructor(client: NetherixBot) {
@@ -45,9 +44,10 @@ export default class WarnCommand extends BaseCommand {
                     .setDescription(`You have been warned in ${interaction.guild!.name}.`)
                     .addField('Reason', reason)
             ]
-        }).catch(() => {});
+        })
+            .catch(() => {});
 
-        let userData = await this.client.main.mongo.getUserData(interaction.guildId!, user.id);
+        const userData = await this.client.main.mongo.getUserData(interaction.guildId!, user.id);
         userData.cases.push({
             user: user.id,
             type: 'Warned',

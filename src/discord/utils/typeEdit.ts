@@ -98,7 +98,7 @@ String.prototype.parseDuration = function(): number {
     const seconds = parseInt(matches[4]) || 0;
 
     return (days * 86400000) + (hours * 3600000) + (minutes * 60000) + (seconds * 1000);
-}
+};
 
 Number.prototype.formatTime = function () {
     const days = Math.floor(this.valueOf() / 86400000);
@@ -121,7 +121,7 @@ Number.prototype.formatTime = function () {
                 components.length === 3 ?
                     `${components[0]}, ${components[1]}, and ${components[2]}` :
                     `${components[0]}, ${components[1]}, ${components[2]}, and ${components[3]}`;
-}
+};
 
 Date.prototype.toDiscord = function (format) {
     switch (format) {

@@ -1,11 +1,10 @@
-import type {AutocompleteInteraction, ChatInputCommandInteraction} from 'discord.js';
-import {PermissionsBitField} from 'discord.js';
-import {ApplicationCommandOptionType, ApplicationCommandType} from 'discord-api-types/v10';
+import type { ChatInputCommandInteraction } from 'discord.js';
+import { PermissionsBitField } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord-api-types/v10';
 
 import type NetherixBot from '../../netherixBot';
 import KingsDevEmbedBuilder from '../../utils/kingsDevEmbedBuilder';
 import BaseCommand from '../base.command';
-import {Snowflake} from "discord-api-types/globals";
 
 export default class MuteCommand extends BaseCommand {
     constructor(client: NetherixBot) {
@@ -52,7 +51,8 @@ export default class MuteCommand extends BaseCommand {
             return interaction.replyError('This user is already muted.');
 
         const reason = interaction.options.getString('reason') ?? 'No reason provided.';
-        let duration = interaction.options.getString('duration', true).parseDuration();
+        let duration = interaction.options.getString('duration', true)
+            .parseDuration();
         if (duration <= 0)
             return interaction.replyError('Invalid duration.');
         else if (duration === 28 * 24 * 60 * 60 * 1000)
@@ -67,13 +67,15 @@ export default class MuteCommand extends BaseCommand {
                     .setColor('Red')
                     .setDescription(`You have been muted in ${interaction.guild!.name} for ${duration.formatTime()}.`)
                     .addField('Reason', reason)
-                    .addField('Expires', new Date(Date.now() + duration).toDiscord("relative"))
+                    .addField('Expires', new Date(Date.now() + duration)
+                        .toDiscord('relative'))
             ]
-        }).catch(() => {});
+        })
+            .catch(() => {});
 
         await member.timeout(duration, reason);
 
-        let userData = await this.client.main.mongo.getUserData(interaction.guildId!, user.id);
+        const userData = await this.client.main.mongo.getUserData(interaction.guildId!, user.id);
         userData.cases.push({
             user: user.id,
             type: 'Muted',
@@ -91,7 +93,8 @@ export default class MuteCommand extends BaseCommand {
                     .setColor('Red')
                     .setDescription(`${user.tag} has been muted in the server for ${duration.formatTime()}.`)
                     .addField('Reason', reason)
-                    .addField('Expires', new Date(Date.now() + duration).toDiscord("relative"))
+                    .addField('Expires', new Date(Date.now() + duration)
+                        .toDiscord('relative'))
             ]
         });
     }

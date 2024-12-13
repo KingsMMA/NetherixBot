@@ -1,11 +1,10 @@
-import type {AutocompleteInteraction, ChatInputCommandInteraction} from 'discord.js';
-import {PermissionsBitField} from 'discord.js';
-import {ApplicationCommandOptionType, ApplicationCommandType} from 'discord-api-types/v10';
+import type { ChatInputCommandInteraction } from 'discord.js';
+import { PermissionsBitField } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord-api-types/v10';
 
 import type NetherixBot from '../../netherixBot';
 import KingsDevEmbedBuilder from '../../utils/kingsDevEmbedBuilder';
 import BaseCommand from '../base.command';
-import {Snowflake} from "discord-api-types/globals";
 
 export default class KickCommand extends BaseCommand {
     constructor(client: NetherixBot) {
@@ -53,11 +52,12 @@ export default class KickCommand extends BaseCommand {
                     .setDescription(`You have been kicked from ${interaction.guild!.name}.`)
                     .addField('Reason', reason)
             ]
-        }).catch(() => {});
+        })
+            .catch(() => {});
 
         await member.kick(reason);
 
-        let userData = await this.client.main.mongo.getUserData(interaction.guildId!, user.id);
+        const userData = await this.client.main.mongo.getUserData(interaction.guildId!, user.id);
         userData.cases.push({
             user: user.id,
             type: 'Kicked',

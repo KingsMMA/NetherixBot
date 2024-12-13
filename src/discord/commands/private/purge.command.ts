@@ -1,14 +1,11 @@
 import type {
-    AutocompleteInteraction,
     ChatInputCommandInteraction,
-    GuildBasedChannel,
     GuildTextBasedChannel
 } from 'discord.js';
-import {PermissionsBitField} from 'discord.js';
-import {ApplicationCommandOptionType, ApplicationCommandType} from 'discord-api-types/v10';
+import { PermissionsBitField } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord-api-types/v10';
 
 import type NetherixBot from '../../netherixBot';
-import KingsDevEmbedBuilder from '../../utils/kingsDevEmbedBuilder';
 import BaseCommand from '../base.command';
 
 export default class PurgeCommand extends BaseCommand {
@@ -85,7 +82,9 @@ export default class PurgeCommand extends BaseCommand {
 
         await (interaction.channel as GuildTextBasedChannel).messages.fetch({ limit: 100 })
             .then(messages => {
-                const userMessages = Array.from(messages.filter(m => m.author.id === user.id).values()).slice(0, amount);
+                const userMessages = Array.from(messages.filter(m => m.author.id === user.id)
+                    .values())
+                    .slice(0, amount);
                 (interaction.channel as GuildTextBasedChannel).bulkDelete(userMessages, true)
                     .then(() => interaction.editReply(`Successfully purged ${amount} messages from ${user.toString()}.`))
                     .catch(() => interaction.replyError('Failed to purge messages.'));

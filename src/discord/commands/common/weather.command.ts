@@ -1,10 +1,10 @@
-import type {AutocompleteInteraction, ChatInputCommandInteraction} from 'discord.js';
-import {ApplicationCommandOptionType, ApplicationCommandType} from 'discord-api-types/v10';
+import type { AutocompleteInteraction, ChatInputCommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord-api-types/v10';
 
+import type { WeatherData } from '../../../main/util/types';
 import type NetherixBot from '../../netherixBot';
 import KingsDevEmbedBuilder from '../../utils/kingsDevEmbedBuilder';
 import BaseCommand from '../base.command';
-import {WeatherData} from "../../../main/util/types";
 
 export default class WeatherCommand extends BaseCommand {
     constructor(client: NetherixBot) {
@@ -39,13 +39,16 @@ export default class WeatherCommand extends BaseCommand {
             .addField('Feels Like', `${weather.current.apparent_temperature}°C`, true)
             .addField('Rain', `${weather.current.rain}mm`, true);
 
-        return interaction.reply({ embeds: [embed] });
+        return interaction.reply({ embeds: [
+            embed
+        ] });
     }
 
     async autocomplete(interaction: AutocompleteInteraction) {
         return interaction.respond(
             this.client.cities
-                .filter(city => city.name.toLowerCase().includes(interaction.options.getString('city')!.toLowerCase()))
+                .filter(city => city.name.toLowerCase()
+                    .includes(interaction.options.getString('city')!.toLowerCase()))
                 .slice(0, 20)
                 .map(city => ({
                     name: city.name,

@@ -1,6 +1,6 @@
-import type {AutocompleteInteraction, ChatInputCommandInteraction} from 'discord.js';
-import {PermissionsBitField} from 'discord.js';
-import {ApplicationCommandOptionType, ApplicationCommandType} from 'discord-api-types/v10';
+import type { ChatInputCommandInteraction } from 'discord.js';
+import { PermissionsBitField } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord-api-types/v10';
 
 import type NetherixBot from '../../netherixBot';
 import KingsDevEmbedBuilder from '../../utils/kingsDevEmbedBuilder';
@@ -46,7 +46,8 @@ export default class LogsCommand extends BaseCommand {
                     .setDescription(userData.cases.map((c, i) =>
                         `**${i + 1}.** ${c.type} by ${c.moderator} at ${c.date.toDiscord('DD MMMM YYYY HH:MM')}${
                             c.duration ? ` for ${c.duration.formatTime()}` : ''
-                        }.  Reason: ${c.reason}`).join('\n'))
+                        }.  Reason: ${c.reason}`)
+                        .join('\n'))
             ]
         });
     }
