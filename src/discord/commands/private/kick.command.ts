@@ -35,7 +35,8 @@ export default class KickCommand extends BaseCommand {
         await interaction.deferReply();
 
         const user = interaction.options.getUser('user', true);
-        const member = interaction.guild!.members.cache.get(user.id);
+        const member = await interaction.guild!.members.fetch(user.id)
+            .catch(() => null);
         if (!member)
             return interaction.replyError('User not found.');
 

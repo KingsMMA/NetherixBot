@@ -35,13 +35,9 @@ export default class WarnCommand extends BaseCommand {
         await interaction.deferReply();
 
         const user = interaction.options.getUser('user', true);
-        const member = interaction.guild!.members.cache.get(user.id);
-        if (!member)
-            return interaction.replyError('User not found.');
-
         const reason = interaction.options.getString('reason') ?? 'No reason provided.';
 
-        await member.send({
+        await user.send({
             embeds: [
                 new KingsDevEmbedBuilder()
                     .setTitle('You have been warned.')
