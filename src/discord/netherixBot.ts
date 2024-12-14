@@ -7,7 +7,7 @@ import path from 'path';
 import type Main from '../main/main';
 import type { City } from '../main/util/types';
 import type BaseCommand from './commands/base.command';
-import LevelManager from "./levels";
+import LevelManager from './levels';
 
 export default class NetherixBot extends Client {
 

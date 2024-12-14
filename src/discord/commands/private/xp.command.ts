@@ -1,11 +1,10 @@
-import type {AutocompleteInteraction, ChatInputCommandInteraction} from 'discord.js';
-import {PermissionsBitField} from 'discord.js';
-import {ApplicationCommandOptionType, ApplicationCommandType} from 'discord-api-types/v10';
+import type { ChatInputCommandInteraction } from 'discord.js';
+import { PermissionsBitField } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord-api-types/v10';
 
+import type { RolesObject } from '../../../main/util/types';
 import type NetherixBot from '../../netherixBot';
-import KingsDevEmbedBuilder from '../../utils/kingsDevEmbedBuilder';
 import BaseCommand from '../base.command';
-import {RolesObject} from "../../../main/util/types";
 
 export default class XpCommand extends BaseCommand {
     constructor(client: NetherixBot) {

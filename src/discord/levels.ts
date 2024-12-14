@@ -1,8 +1,9 @@
-import NetherixBot from "./netherixBot";
-import {Snowflake} from "discord-api-types/globals";
-import {main} from "../main/main";
-import {RolesObject, ServerConfig} from "../main/util/types";
-import {GuildMember} from "discord.js";
+import type { GuildMember } from 'discord.js';
+import type { Snowflake } from 'discord-api-types/globals';
+
+import { main } from '../main/main';
+import type { RolesObject, ServerConfig } from '../main/util/types';
+import type NetherixBot from './netherixBot';
 
 export default class LevelManager {
 
@@ -25,13 +26,19 @@ export default class LevelManager {
     }
 
     async updateRoles(serverConfig: ServerConfig, member: GuildMember, level: keyof RolesObject) {
-        let role = serverConfig.roles[level];
+        const role = serverConfig.roles[level];
         if (role && !member.roles.cache.has(role)) await member.roles.add(role);
 
-        let rolesToRemove = Object.entries(serverConfig.roles)
-            .filter(([l, _]) => l.toString() !== level.toString())
-            .filter(([_, role]) => member.roles.cache.has(role));
-        if (rolesToRemove.length > 0) await member.roles.remove(rolesToRemove.map(([_, role]) => role));
+        const rolesToRemove = Object.entries(serverConfig.roles)
+            .filter(([
+                l, _
+            ]) => l.toString() !== level.toString())
+            .filter(([
+                _, role
+            ]) => member.roles.cache.has(role));
+        if (rolesToRemove.length > 0) await member.roles.remove(rolesToRemove.map(([
+            _, role
+        ]) => role));
     }
 
     getXp(guildId: Snowflake, userId: Snowflake): number {
@@ -40,7 +47,7 @@ export default class LevelManager {
 
     setXp(guildId: Snowflake, userId: Snowflake, xp: number): boolean {
         if (!this.xpCache[guildId]) this.xpCache[guildId] = {};
-        let oldXp = this.xpCache[guildId][userId] ?? 0;
+        const oldXp = this.xpCache[guildId][userId] ?? 0;
         this.xpCache[guildId][userId] = xp;
         return this.getLevelFromXP(oldXp) !== this.getLevelFromXP(xp);
     }

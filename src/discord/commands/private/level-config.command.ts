@@ -1,11 +1,11 @@
-import type {AutocompleteInteraction, ChatInputCommandInteraction} from 'discord.js';
-import {PermissionsBitField} from 'discord.js';
-import {ApplicationCommandOptionType, ApplicationCommandType, ChannelType} from 'discord-api-types/v10';
+import type { ChatInputCommandInteraction } from 'discord.js';
+import { PermissionsBitField } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandType, ChannelType } from 'discord-api-types/v10';
 
+import type { RolesObject } from '../../../main/util/types';
 import type NetherixBot from '../../netherixBot';
 import KingsDevEmbedBuilder from '../../utils/kingsDevEmbedBuilder';
 import BaseCommand from '../base.command';
-import {RolesObject} from "../../../main/util/types";
 
 export default class LevelConfigCommand extends BaseCommand {
     constructor(client: NetherixBot) {
@@ -30,7 +30,9 @@ export default class LevelConfigCommand extends BaseCommand {
                             description: 'The channel where level up messages are sent.',
                             type: ApplicationCommandOptionType.Channel,
                             required: true,
-                            channel_types: [ChannelType.GuildText]
+                            channel_types: [
+                                ChannelType.GuildText
+                            ]
                         }
                     ]
                 },
@@ -93,9 +95,13 @@ export default class LevelConfigCommand extends BaseCommand {
                     .setTitle('Level System Configuration')
                     .setColor('Blue')
                     .addField('Level Up Channel', config.levelUpChannel ? `<#${config.levelUpChannel}>` : 'No channel set.')
-                    .addField('Roles', Object.entries(config.roles).map(([level, roleId]) => `Level ${level}: ${
-                        roleId ? `<@&${roleId}>` : 'No role set.'
-                    }`).join('\n'))
+                    .addField('Roles', Object.entries(config.roles)
+                        .map(([
+                            level, roleId
+                        ]) => `Level ${level}: ${
+                            roleId ? `<@&${roleId}>` : 'No role set.'
+                        }`)
+                        .join('\n'))
             ]
         });
     }
@@ -123,14 +129,17 @@ export default class LevelConfigCommand extends BaseCommand {
         for (let i = 10; i >= 1; i--) {
             await interaction.guild!.roles.create({
                 name: `Level ${
-                    ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'][i - 1]
+                    [
+                        '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'
+                    ][i - 1]
                 }`,
                 color: 'Blue',
                 permissions: [],
                 mentionable: false,
-            }).then(role => {
-                config.roles[i as keyof RolesObject] = role.id;
-            });
+            })
+                .then(role => {
+                    config.roles[i as keyof RolesObject] = role.id;
+                });
         }
 
         await this.client.main.mongo.saveServerConfig(config);

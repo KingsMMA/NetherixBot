@@ -3,7 +3,7 @@ import type { Db } from 'mongodb';
 import { MongoClient } from 'mongodb';
 
 import type Main from '../main';
-import type {RolesObject, ServerConfig, UserData} from './types';
+import type { RolesObject, ServerConfig, UserData } from './types';
 
 export default class Mongo {
     private mongo!: Db;
@@ -38,13 +38,17 @@ export default class Mongo {
                 .collection('levels')
                 .find()
                 .toArray())
-                .map(({ guildId, users }) => [guildId, users]));
+                .map(({ guildId, users }) => [
+                    guildId, users
+                ]));
     }
 
     async saveLevelData(data: Record<Snowflake, Record<Snowflake, number>>) {
         await Promise.all(
             Object.entries(data)
-                .map(([guildId, users]) => this.mongo
+                .map(([
+                    guildId, users
+                ]) => this.mongo
                     .collection('levels')
                     .updateOne({ guildId }, { $set: { users } }, { upsert: true })));
     }
@@ -55,7 +59,9 @@ export default class Mongo {
             .findOne({ guildId }) as ServerConfig | null ?? {
             guildId,
             levelUpChannel: null,
-            roles: Object.fromEntries(Array.from({ length: 10 }, (_, i) => [i + 1, null])) as unknown as RolesObject,
+            roles: Object.fromEntries(Array.from({ length: 10 }, (_, i) => [
+                i + 1, null
+            ])) as unknown as RolesObject,
         };
     }
 
