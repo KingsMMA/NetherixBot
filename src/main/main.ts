@@ -8,11 +8,15 @@ import loggerInitialisedMessage from '../discord/utils/typeEdit';
 import type config from './data/config.json';
 import Mongo from './util/mongo';
 
+let main: Main;
+
 export default class Main {
     mongo: Mongo;
     client!: NetherixBot;
 
     constructor() {
+        main = this;
+
         console.log(loggerInitialisedMessage);
         this.mongo = new Mongo(this);
     }
@@ -35,3 +39,5 @@ export default class Main {
         fs.writeFileSync('./src/main/data/config.json', JSON.stringify(config, null, 2));
     }
 }
+
+export { main };

@@ -7,16 +7,19 @@ import path from 'path';
 import type Main from '../main/main';
 import type { City } from '../main/util/types';
 import type BaseCommand from './commands/base.command';
+import LevelManager from "./levels";
 
 export default class NetherixBot extends Client {
-    main: Main;
-    commands: Collection<string, BaseCommand> = new Collection();
 
+    main: Main;
+    levels: LevelManager;
+    commands: Collection<string, BaseCommand> = new Collection();
     cities: City[];
 
     constructor(main: Main, options: ClientOptions) {
         super(options);
         this.main = main;
+        this.levels = new LevelManager(this);
 
         console.log('Loading cities...');
         if (fs.existsSync('./cache/cities.json')) {
