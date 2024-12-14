@@ -39,7 +39,6 @@ export default class LevelManager {
     }
 
     setXp(guildId: Snowflake, userId: Snowflake, xp: number): boolean {
-        console.log(`Setting XP for ${userId} in ${guildId} to ${xp}`);
         if (!this.xpCache[guildId]) this.xpCache[guildId] = {};
         let oldXp = this.xpCache[guildId][userId] ?? 0;
         this.xpCache[guildId][userId] = xp;
